@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "app/sass/abstract";
+@import "app/sass/base";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $main-bg-color;
+  height: 100vh;
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+  color: $default-body-text-color;
+}
