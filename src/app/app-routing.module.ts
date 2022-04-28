@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MainViewComponent } from './dashboard/components/main-view/main-view.component';
 
 const routes: Routes = [
   //Route to the home page
   {
     path: '',
-    component: DashboardComponent,
+    component: MainViewComponent,
   },
 ];
 

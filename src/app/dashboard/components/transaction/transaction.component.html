@@ -1,0 +1,18 @@
+<!-- <div class='transactions__row' *ngIf="transaction.amount > 0">
+    <div class="transactions__type transactions__type--deposit">{{index+1}} deposit</div>
+    <div class="transactions__date">{{transaction.date}}</div>
+    <div class="transactions__value">{{transaction.amount}}</div>
+</div>
+<div class='transactions__row' *ngIf="transaction.amount < 0">
+    <div class="transactions__type transactions__type--withdrawal">{{index+1}} Withdraw</div>
+    <div class="transactions__date">{{transaction.date}}</div>
+    <div class="transactions__value">-{{transaction.amount * -1}}</div>
+</div> -->
+<div class='transactions__row'>
+    <div class="transactions__type" [ngClass]="{
+        'transactions__type--withdrawal':transaction.amount<0,
+        'transactions__type--deposit':transaction.amount>0}">
+        {{index+1}} {{transaction.amount<0?'withdraw':'deposit'}} </div>
+            <div class="transactions__date">{{transaction.date}}</div>
+            <div class="transactions__value">{{transaction.amount}}</div>
+    </div>

@@ -1,0 +1,5 @@
+<div class='transactions'>
+    <app-transaction *ngFor="let transaction of transactions; index as i"
+                     [transaction]="transaction" [index]="i">
+    </app-transaction>
+</div>
