@@ -1,6 +1,9 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Transaction } from '../../dashboard-models';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { DashboardWorkerService } from '../../services/dashboard-worker.service';
 
 @Component({
@@ -8,23 +11,14 @@ import { DashboardWorkerService } from '../../services/dashboard-worker.service'
   templateUrl: './balance.component.html',
   styleUrls: ['./balance.component.scss'],
 })
-export class BalanceComponent implements OnInit, AfterViewInit {
-  balance: number | undefined;
-  balanceSub: Subscription;
+export class BalanceComponent implements OnInit, AfterViewChecked {
+  balance: string | undefined;
+  date: string;
   constructor(private worker: DashboardWorkerService) {}
-  ngAfterViewInit(): void {
-    // this.balance = this.worker.getBalance();
-
-    console.log(this.balance);
+  ngAfterViewChecked(): void {
+    this.balance = this.worker.formatNumber(this.worker.getBalance()!);
+    this.date = this.worker.simpleFormatDate();
   }
 
-  ngOnInit(): void {
-    this.balance = this.worker.getBalance();
-    console.log('READD', this.balance);
-    // this.balanceSub = this.worker
-    //   .getBalance()
-    //   .subscribe((amountList: Array<Transaction> | undefined) => {
-    //     console.log('AMOUNTLISTTOU', amountList);
-    //   });
-  }
+  ngOnInit(): void {}
 }

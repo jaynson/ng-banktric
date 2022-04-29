@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 // import { Observable } from 'rxjs';
 import { Account } from 'src/app/models';
 
@@ -9,11 +9,39 @@ import { Account } from 'src/app/models';
 })
 export class AuthenticationWorkerService {
   private accountsList: Account[];
+  private sub: Subscription;
   dummyAccount: Account;
   loggedinAccount: Account | undefined;
 
   constructor(private http: HttpClient) {
-    this.http
+    console.log('FROM AUTH SERVICE');
+  }
+
+  unsubscribeService() {
+    this.sub?.unsubscribe();
+  }
+
+  logout() {
+    console.log('Logging out Auth Service');
+    this.loggedinAccount = undefined;
+  }
+
+  fetchAccountWithUsername(uName: string): Account | undefined {
+    return this.accountsList.find((acc) => acc.username === uName);
+  }
+
+  getAccountsList(): Account[] {
+    console.log('In the SERVICE', this.accountsList);
+    return this.accountsList;
+  }
+
+  getCurrentAccount(): Observable<Account> {
+    console.log('DUMMMMYYYY', this.dummyAccount);
+    return of(this.dummyAccount);
+  }
+
+  jsonAccountsRetriever(): void {
+    this.sub = this.http
       .get<Array<Account>>('/assets/models/accounts.json')
       .subscribe((accounts: Array<Account>) => {
         this.accountsList = accounts.map((acc) => {
@@ -25,43 +53,14 @@ export class AuthenticationWorkerService {
           return { ...acc, username: username };
         });
         console.log('YTOUU', this.accountsList);
-        this.dummyAccount = this.accountsList[0];
+        this.dummyAccount = this.accountsList[2];
         console.log('TIEE', this.dummyAccount);
       });
   }
 
-  getAccountsList(): Account[] {
-    return this.accountsList;
-  }
-
-  getCurrentAccount(): Observable<Account> {
-    console.log('DUMMMMYYYY', this.dummyAccount);
-    return of(this.dummyAccount);
-  }
-
-  jsonAccountsRetriever(): void {
-    // console.log(
-    //   'JSOON',
-    //   this.http.get<Array<Account>>('/assets/models/accounts.json').subscribe()
-    // );
-    // this.http
-    //   .get<Array<Account>>('/assets/models/accounts.json')
-    //   .subscribe((accounts: Array<Account>) => {
-    //     this.accountsList = accounts.map((acc) => {
-    //       let username = acc.owner
-    //         .toLowerCase()
-    //         .split(' ')
-    //         .map((name) => name[0])
-    //         .join('');
-    //       return { ...acc, username: username };
-    //     });
-    //     console.log('YTOUU', this.accountsList);
-    //     this.dummyAccount = this.accountsList[2];
-    //     console.log('TIEE', this.dummyAccount);
-    //   });
-  }
-
   login(username: string, pin: string): boolean {
+    // this.loggedinAccount = undefined;
+    console.log('USerNAme', 'PAsswor', username, pin);
     this.loggedinAccount = this.accountsList.find(
       (acc) => acc.username === username && acc.pin === Number(pin)
     );
@@ -72,6 +71,6 @@ export class AuthenticationWorkerService {
 
   getLoggedinAccount(): Account | undefined {
     // return this.loggedinAccount;
-    return this.dummyAccount;
+    return this.loggedinAccount;
   }
 }

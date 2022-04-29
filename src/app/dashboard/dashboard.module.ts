@@ -9,7 +9,10 @@ import { TransferComponent } from './components/transfer/transfer.component';
 import { LoanComponent } from './components/loan/loan.component';
 import { CloseComponent } from './components/close/close.component';
 import { TimeoutComponent } from './components/timeout/timeout.component';
+import { FormsModule } from '@angular/forms';
 import { AuthenticationWorkerService } from '../user-auth/services/authentication-worker.service';
+import { WelcomeBarComponent } from './components/welcome-bar/welcome-bar.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -22,8 +25,9 @@ import { AuthenticationWorkerService } from '../user-auth/services/authenticatio
     LoanComponent,
     CloseComponent,
     TimeoutComponent,
+    WelcomeBarComponent,
   ],
-  imports: [CommonModule],
-  providers: [AuthenticationWorkerService],
+  imports: [CommonModule, FormsModule, RouterModule],
+  // providers: [AuthenticationWorkerService],
 })
 export class DashboardModule {}

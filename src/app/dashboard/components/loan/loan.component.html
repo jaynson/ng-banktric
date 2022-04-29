@@ -1,7 +1,8 @@
 <div class="operation operation--loan">
     <h2 class='operation__heading'>Loan Request</h2>
-    <form class="form form--loan">
-        <input type="number" id="loan" class="form__input form__input--loan-amount" />
+    <form class="form form--loan" #loanForm="ngForm" (ngSubmit)="onSubmit(loanForm)">
+        <input type="number" id="loan" class="form__input form__input--loan-amount" name="loan"
+               [(ngModel)]="loanAmt" #loanInput />
         <button class="form__btn form__btn--loan">
             &rarr;
         </button>

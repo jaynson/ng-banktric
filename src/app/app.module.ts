@@ -7,11 +7,12 @@ import { UserAuthModule } from './user-auth/user-auth.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { HomeComponent } from './home/home.component';
 import { AuthenticationWorkerService } from './user-auth/services/authentication-worker.service';
+import { DashboardWorkerService } from './dashboard/services/dashboard-worker.service';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
   imports: [BrowserModule, AppRoutingModule, UserAuthModule, DashboardModule],
-  providers: [AuthenticationWorkerService],
+  providers: [AuthenticationWorkerService, DashboardWorkerService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

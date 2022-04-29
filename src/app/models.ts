@@ -12,3 +12,9 @@ interface Transaction {
   amount: number;
   date: string;
 }
+
+export enum SortBy {
+  none = 1,
+  asc,
+  des,
+}

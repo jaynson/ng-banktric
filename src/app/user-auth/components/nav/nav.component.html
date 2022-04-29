@@ -1,7 +1,5 @@
 <nav class='header'>
-    <p class='welcome' *ngIf="!currentAccount">Please log in!</p>
-    <p class='welcome' *ngIf="currentAccount">Welcome back, {{currentAccount.owner.split('
-        ')[0]}}</p>
+    <p class='welcome'>Please log in!</p>
     <img src='assets/images/logo.png' alt='logo' class="logo" />
     <form class='login' #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
         <input type="text" placeholder='username' class='login__input login__input--user'

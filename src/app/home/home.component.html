@@ -1,1 +1,1 @@
-<app-nav></app-nav>
+<app-nav (userLoggedin)="loadDashboard($event)" [currentAccount]="getLoadedAccount()"></app-nav>

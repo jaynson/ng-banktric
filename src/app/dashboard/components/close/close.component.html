@@ -1,12 +1,16 @@
 <div class="operation operation--close">
     <h2 class='operation__heading'>Close Account</h2>
-    <form class="form form--close">
-        <input type="text" class="form__input form__input--user" id="close-user" />
-        <input type="password" maxLength="6" class="form__input form__input--pin" id="close-pin" />
+    <form class="form form--close" #closeForm="ngForm" (ngSubmit)="onSubmit(closeForm)">
+        <input type="text" class="form__input form__input--user" id="close-user" name="uName"
+               [(ngModel)]="username" />
+        <input type="password" maxLength="6" class="form__input form__input--pin" id="close-pin"
+               name="pin" [(ngModel)]="pin" />
         <button class="form__btn form__btn--close">
             &rarr;
         </button>
         <label class="form__label" for="close-user">Confirm user</label>
         <label class="form__label" for="close-pin">Confirm PIN</label>
+        <div *ngIf="isInvalid" class="form__label" [ngStyle]="{'color': '#fff'}"> Invalid Details
+        </div>
     </form>
 </div>

@@ -1,8 +1,10 @@
 <div class="operation operation--transfer">
     <h2 class='operation__heading'>Transfer</h2>
-    <form class="form form--transfer">
-        <input type="text" id="receiver-input" class="form__input form__input--to" />
-        <input type="number" id="amount" class="form__input form__input--amount" />
+    <form class="form form--transfer" #transferForm="ngForm" (ngSubmit)="onSubmit(transferForm)">
+        <input type="text" id="receiver-input" class="form__input form__input--to" name='rec'
+               [(ngModel)]='receiver' #inputfield />
+        <input type="number" id="amount" class="form__input form__input--amount" name='amt'
+               [(ngModel)]='amount' #inputfield />
         <button class="form__btn form__btn--transfer">
             &rarr;
         </button>

@@ -13,6 +13,6 @@
         'transactions__type--withdrawal':transaction.amount<0,
         'transactions__type--deposit':transaction.amount>0}">
         {{index+1}} {{transaction.amount<0?'withdraw':'deposit'}} </div>
-            <div class="transactions__date">{{transaction.date}}</div>
+            <div class="transactions__date">{{date}}</div>
             <div class="transactions__value">{{transaction.amount}}</div>
     </div>

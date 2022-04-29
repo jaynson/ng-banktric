@@ -2,10 +2,14 @@ import {
   Component,
   OnInit,
   Input,
-  DoCheck,
+  AfterContentChecked,
+  AfterContentInit,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { SortBy } from 'src/app/models';
 import { Transaction } from '../../dashboard-models';
 import { DashboardWorkerService } from '../../services/dashboard-worker.service';
 
@@ -14,19 +18,34 @@ import { DashboardWorkerService } from '../../services/dashboard-worker.service'
   templateUrl: './ledger.component.html',
   styleUrls: ['./ledger.component.scss'],
 })
-export class LedgerComponent implements OnInit, DoCheck {
+export class LedgerComponent
+  implements
+    OnInit,
+    AfterContentChecked,
+    AfterContentInit,
+    OnChanges,
+    OnDestroy
+{
+  // @Input('dashWorker') worker: DashboardWorkerService;
   @Input() transactions: Transaction[] | undefined;
+  private fetch: Subscription;
 
-  constructor(private worker: DashboardWorkerService) {
-    console.log('FIRST');
+  constructor(private worker: DashboardWorkerService) {}
+  ngOnDestroy(): void {
+    this.fetch?.unsubscribe();
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('LEDGER CHANGES', changes);
   }
 
-  ngDoCheck(): void {
-    this.transactions = this.worker.getTransactions();
-    console.log('LEDGER', this.transactions);
+  ngAfterContentInit(): void {}
+  ngAfterContentChecked(): void {
+    this.worker.fetchTransactions().subscribe((trans: Transaction[]) => {
+      this.transactions = trans;
+    });
   }
 
   ngOnInit(): void {
-    // On load, retrive initial list of transactions
+    this.worker.setSorting(SortBy.none);
   }
 }

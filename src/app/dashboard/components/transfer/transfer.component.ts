@@ -1,4 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { DashboardWorkerService } from '../../services/dashboard-worker.service';
 
 @Component({
   selector: 'app-transfer',
@@ -12,7 +23,22 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class TransferComponent implements OnInit {
-  constructor() {}
+  receiver: string;
+  amount: number | undefined;
+  @ViewChildren('inputfield') inField: QueryList<ElementRef>;
+
+  constructor(private dashService: DashboardWorkerService) {}
 
   ngOnInit(): void {}
+
+  onSubmit(form: NgForm) {
+    this.receiver = form.value.rec;
+    this.amount = form.value.amt;
+    if (!this.dashService.transfer(this.receiver, this.amount!)) {
+      return;
+    }
+    this.inField.forEach((el) => el.nativeElement.blur());
+    this.amount = undefined;
+    this.receiver = '';
+  }
 }

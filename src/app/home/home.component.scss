@@ -1,0 +1,16 @@
+.login-error {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 2rem;
+
+  &__message {
+    display: block;
+    color: #f1492f;
+    text-align: center;
+    width: 23rem;
+    font-size: 1.4rem;
+    display: inline-block;
+    margin-right: 3.2rem;
+  }
+}

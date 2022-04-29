@@ -2,8 +2,8 @@
     <p class="summary__label">In</p>
     <p class="summary__value summary__value--in">{{depositTotal}}</p>
     <p class="summary__label">Out</p>
-    <p class="summary__value summary__value--out">{{withdrawTotal}}</p>
+    <p class="summary__value summary__value--out">{{withdrawTotal }}</p>
     <p class="summary__label">Interest</p>
     <p class="summary__value summary__value--interest">{{interest}}</p>
-    <button class="btn--sort">&darr; SORT</button>
+    <button class="btn--sort" (click)="sortTransactions()">&darr; SORT</button>
 </div>

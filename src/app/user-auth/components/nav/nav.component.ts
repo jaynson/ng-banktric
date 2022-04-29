@@ -1,12 +1,14 @@
 import {
   Component,
   ElementRef,
-  OnChanges,
   OnInit,
   SimpleChanges,
   ViewChild,
   Input,
   DoCheck,
+  Output,
+  EventEmitter,
+  AfterContentChecked,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Account } from 'src/app/models';
@@ -17,37 +19,32 @@ import { AuthenticationWorkerService } from '../../services/authentication-worke
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent implements OnInit, DoCheck {
-  @ViewChild('pinInput') pInput: ElementRef;
-  @Input() currentAccount: Account | undefined;
+export class NavComponent implements OnInit, AfterContentChecked {
   username: string;
   pin: string;
+  @ViewChild('pinInput') pInput: ElementRef;
+  @Input() currentAccount: Account | undefined;
+  @Output() userLoggedin: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private worker: AuthenticationWorkerService) {}
-  ngDoCheck(): void {
-    // this.currentAccount = this.worker.getLoggedinAccount();
-    console.log('INTSUB', this.currentAccount);
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('CHANGES', changes);
-  }
+  ngAfterContentChecked(): void {}
+  ngOnChanges(changes: SimpleChanges): void {}
 
-  ngOnInit(): void {
-    // this.username = '';
-    // this.pin = '';
-    this.worker.jsonAccountsRetriever();
-  }
+  ngOnInit(): void {}
 
   onSubmit(form: NgForm) {
     console.log('Subbb', form.value);
     this.username = form.value.uname;
     this.pin = form.value.pin;
-    this.worker.login(this.username, this.pin)
-      ? console.log('Win')
-      : console.log('Lean');
+    // console.log(this.worker.);
+    if (this.worker.login(this.username, this.pin)) {
+      this.userLoggedin.emit(true);
+    } else {
+      this.userLoggedin.emit(false);
+    }
     this.username = '';
     this.pin = '';
+
     this.pInput.nativeElement.blur();
     this.currentAccount = this.worker.getLoggedinAccount();
-    console.log('INTSUB', this.currentAccount);
   }
 }
