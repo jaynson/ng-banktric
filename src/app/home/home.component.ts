@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       !this.authWorker.getAccountsList() && this.loadAccounts();
       if (this.isLoggedin) this.unloadDashboard();
     });
-    console.log('FROM HOME!');
   }
   unloadDashboard() {
     this.isLoggedin = false;
@@ -36,7 +35,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   loadAccounts() {
-    this.authWorker.jsonAccountsRetriever();
+    const localStore = localStorage.getItem('accounts');
+    if (localStore) this.authWorker.loadFromLocalStorage(localStore);
+    else this.authWorker.jsonAccountsRetriever();
   }
   loadDashboard(ev: boolean) {
     this.isLoggedin = ev;

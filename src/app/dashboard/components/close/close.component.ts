@@ -1,4 +1,10 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DashboardWorkerService } from '../../services/dashboard-worker.service';
@@ -18,6 +24,7 @@ export class CloseComponent implements OnInit, AfterViewChecked {
   username: string;
   pin: string;
   isInvalid: boolean;
+  @Output() onUserAction: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private dashService: DashboardWorkerService,
@@ -32,6 +39,7 @@ export class CloseComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {}
 
   onSubmit(form: NgForm) {
+    this.onUserAction.emit(true);
     this.username = form.value.uName;
     this.pin = form.value.pin;
     if (this.dashService.closeAccount(this.username, this.pin)) {
@@ -42,5 +50,6 @@ export class CloseComponent implements OnInit, AfterViewChecked {
       return;
     }
     this.isInvalid = true;
+    this.onUserAction.emit(false);
   }
 }

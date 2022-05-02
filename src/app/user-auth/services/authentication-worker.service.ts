@@ -10,12 +10,9 @@ import { Account } from 'src/app/models';
 export class AuthenticationWorkerService {
   private accountsList: Account[];
   private sub: Subscription;
-  dummyAccount: Account;
   loggedinAccount: Account | undefined;
 
-  constructor(private http: HttpClient) {
-    console.log('FROM AUTH SERVICE');
-  }
+  constructor(private http: HttpClient) {}
 
   unsubscribeService() {
     this.sub?.unsubscribe();
@@ -31,13 +28,12 @@ export class AuthenticationWorkerService {
   }
 
   getAccountsList(): Account[] {
-    console.log('In the SERVICE', this.accountsList);
     return this.accountsList;
   }
 
-  getCurrentAccount(): Observable<Account> {
-    console.log('DUMMMMYYYY', this.dummyAccount);
-    return of(this.dummyAccount);
+  loadFromLocalStorage(data: string): void {
+    this.accountsList = JSON.parse(data);
+    console.log('LOCALLL', this.accountsList);
   }
 
   jsonAccountsRetriever(): void {
@@ -52,25 +48,19 @@ export class AuthenticationWorkerService {
             .join('');
           return { ...acc, username: username };
         });
-        console.log('YTOUU', this.accountsList);
-        this.dummyAccount = this.accountsList[2];
-        console.log('TIEE', this.dummyAccount);
       });
   }
 
   login(username: string, pin: string): boolean {
     // this.loggedinAccount = undefined;
-    console.log('USerNAme', 'PAsswor', username, pin);
     this.loggedinAccount = this.accountsList.find(
       (acc) => acc.username === username && acc.pin === Number(pin)
     );
 
-    console.log('WHOIS', this.loggedinAccount);
     return this.loggedinAccount ? true : false;
   }
 
   getLoggedinAccount(): Account | undefined {
-    // return this.loggedinAccount;
     return this.loggedinAccount;
   }
 }

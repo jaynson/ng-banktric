@@ -26,12 +26,15 @@ export class TransferComponent implements OnInit {
   receiver: string;
   amount: number | undefined;
   @ViewChildren('inputfield') inField: QueryList<ElementRef>;
+  @Output() onUserAction: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private dashService: DashboardWorkerService) {}
 
   ngOnInit(): void {}
 
   onSubmit(form: NgForm) {
+    this.onUserAction.emit(true);
+
     this.receiver = form.value.rec;
     this.amount = form.value.amt;
     if (!this.dashService.transfer(this.receiver, this.amount!)) {
@@ -40,5 +43,6 @@ export class TransferComponent implements OnInit {
     this.inField.forEach((el) => el.nativeElement.blur());
     this.amount = undefined;
     this.receiver = '';
+    this.onUserAction.emit(false);
   }
 }

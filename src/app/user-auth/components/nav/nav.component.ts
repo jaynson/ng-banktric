@@ -32,7 +32,6 @@ export class NavComponent implements OnInit, AfterContentChecked {
   ngOnInit(): void {}
 
   onSubmit(form: NgForm) {
-    console.log('Subbb', form.value);
     this.username = form.value.uname;
     this.pin = form.value.pin;
     // console.log(this.worker.);

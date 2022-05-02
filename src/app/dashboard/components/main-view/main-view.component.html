@@ -3,10 +3,10 @@
     <app-balance></app-balance>
     <app-ledger></app-ledger>
     <app-summary></app-summary>
-    <app-transfer></app-transfer>
-    <app-loan></app-loan>
-    <app-close></app-close>
-    <app-timeout></app-timeout>
+    <app-transfer (onUserAction)="actionEmmited($event)"></app-transfer>
+    <app-loan (onUserAction)="actionEmmited($event)"></app-loan>
+    <app-close (onUserAction)="actionEmmited($event)"></app-close>
+    <app-timeout [timer]="timeLeft"></app-timeout>
 </main>
 
 <!-- [dashWorker]="mainworker()" -->

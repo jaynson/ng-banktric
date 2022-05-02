@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, of, Subscription } from 'rxjs';
+import { interval, map, Observable } from 'rxjs';
 import { Account, SortBy } from 'src/app/models';
 import { AuthenticationWorkerService } from 'src/app/user-auth/services/authentication-worker.service';
 import { Transaction } from '../dashboard-models';
@@ -8,6 +8,15 @@ import { Transaction } from '../dashboard-models';
   providedIn: 'root',
 })
 export class DashboardWorkerService {
+  private amountList: number[] | undefined;
+  private account: Account;
+  private accountList: Account[];
+  private sorting: SortBy = SortBy.none;
+  private timoutDurationSecs = 120;
+  // private authSub: Subscription;
+  constructor(private authService: AuthenticationWorkerService) {
+    // this.getTransactions();
+  }
   simpleFormatDate(): string {
     const dateOptions: Intl.DateTimeFormatOptions = {
       hour: 'numeric',
@@ -38,13 +47,10 @@ export class DashboardWorkerService {
     }
     return result;
   }
-  private amountList: number[] | undefined;
-  private account: Account;
-  private accountList: Account[];
-  private sorting: SortBy = SortBy.none;
-  // private authSub: Subscription;
-  constructor(private authService: AuthenticationWorkerService) {
-    // this.getTransactions();
+
+  // Start Timer Observable
+  startTimer(): Observable<number> {
+    return interval(1000).pipe(map((ev) => this.timoutDurationSecs - ev));
   }
 
   setSorting(type: SortBy) {
@@ -97,6 +103,7 @@ export class DashboardWorkerService {
           date: loanDate,
         });
       }, 2500);
+      this.persistData();
       return true;
     }
     return false;
@@ -117,9 +124,17 @@ export class DashboardWorkerService {
       const txDate = new Date().toISOString();
       receiverAccount.transactions.push({ amount: amount, date: txDate });
       this.account.transactions.push({ amount: -amount, date: txDate });
+      this.persistData();
       return true;
     }
     return false;
+  }
+
+  persistData() {
+    localStorage.setItem(
+      'accounts',
+      JSON.stringify(this.authService.getAccountsList())
+    );
   }
 
   currentAccount(): Account {

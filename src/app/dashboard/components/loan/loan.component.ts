@@ -16,15 +16,19 @@ import { DashboardWorkerService } from '../../services/dashboard-worker.service'
 })
 export class LoanComponent implements OnInit {
   @ViewChild('loanInput') lInput: ElementRef;
+  @Output() onUserAction: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   loanAmt: number | undefined;
   constructor(private dashWorker: DashboardWorkerService) {}
 
   ngOnInit(): void {}
 
   onSubmit(form: NgForm) {
+    this.onUserAction.emit(true);
     this.loanAmt = form.value.loan;
     if (!this.dashWorker.requestLoan(this.loanAmt!)) return;
     this.loanAmt = undefined;
     this.lInput.nativeElement.blur();
+    this.onUserAction.emit(false);
   }
 }

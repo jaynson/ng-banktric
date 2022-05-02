@@ -1,5 +1,14 @@
-import { AfterViewChecked, Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { AuthenticationWorkerService } from 'src/app/user-auth/services/authentication-worker.service';
 import { DashboardWorkerService } from '../../services/dashboard-worker.service';
 
@@ -24,38 +33,56 @@ import { DashboardWorkerService } from '../../services/dashboard-worker.service'
     `,
   ],
 })
-export class TimeoutComponent implements OnInit, AfterViewChecked {
+export class TimeoutComponent implements OnInit, OnChanges {
   seconds: string;
   minutes: string;
+  @Input('timer') timeLeft: number;
   constructor(
     private authService: AuthenticationWorkerService,
     private router: Router
   ) {}
-  ngAfterViewChecked(): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    this.tick();
+  }
 
   ngOnInit(): void {
-    this.startTimer();
+    // this.startTimer();
   }
 
-  startTimer() {
-    let time = 600;
-    const tick = () => {
-      this.minutes = String(Math.trunc(time / 60)).padStart(2, '0');
-      this.seconds = String(time % 60).padStart(2, '0');
+  tick = () => {
+    this.minutes = this.timeLeft
+      ? String(Math.trunc(this.timeLeft / 60)).padStart(2, '0')
+      : '--';
+    this.seconds = this.timeLeft
+      ? String(this.timeLeft % 60).padStart(2, '0')
+      : '--';
 
-      //Stop timer when time runs out
-      if (time === 0) {
-        clearInterval(timer);
-        this.authService.logout();
-        this.router.navigateByUrl('/');
-      }
-      time--;
-    };
+    //Stop timer when time runs out
+    if (this.timeLeft === 0) {
+      this.authService.logout();
+      this.router.navigateByUrl('/');
+    }
+  };
 
-    tick();
+  // startTimer() {
+  //   let time = 600;
+  //   const tick = () => {
+  //     this.minutes = String(Math.trunc(time / 60)).padStart(2, '0');
+  //     this.seconds = String(time % 60).padStart(2, '0');
 
-    const timer = setInterval(tick, 1000);
+  //     //Stop timer when time runs out
+  //     if (time === 0) {
+  //       // clearInterval(timer);
+  //       this.authService.logout();
+  //       this.router.navigateByUrl('/');
+  //     }
+  //     time--;
+  //   };
 
-    return timer;
-  }
+  //   // tick();
+
+  //   // const timer = setInterval(tick, 1000);
+
+  //   return timer;
+  // }
 }
